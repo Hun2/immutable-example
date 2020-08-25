@@ -1,42 +1,60 @@
 import React, { Component } from 'react';
 import UserList from './UserList';
+import { Map, List, Record } from 'immutable';
+
+// User를 위한 Record 생성
+const User = Record({
+  id: null,
+  username: null
+});
+
+// Data를 위한 Record 생성
+const Data = Record({
+  input: '',
+  users: List()
+});
 
 class App extends Component {
   id = 3;
 
   state = {
-    input: '',
-    users: [
-      {
-        id: 1,
-        username: 'jhren'
-      },
-      {
-        id: 2,
-        username: 'junghoon'
-      }
-    ]
+    data: Data({
+      users: List([
+        User({
+          id: 1,
+          username: 'jhren'
+        }),
+        User({
+          id: 2,
+          username: 'junghoon'
+        })
+      ])
+    })
   }
 
   onChange = (e) => {
     const { value } = e.target;
+    const { data } = this.state;
     this.setState({
-      input: value
+      data: data.set('input', value)
     });
   }
 
   onButtonClick = (e) => {
-    this.setState(({ users, input }) => ({
-      input: '',
-      users: users.concat({
+    const { data } = this.state;
+
+    this.setState({
+      data: data.set('input', '')
+      .update('users', users => users.push(new User({
         id: this.id++,
-        username: input
-      })
-    }))
+        username: data.get('input')
+      })))
+    })
   }
+
   render() {
     const { onChange, onButtonClick } = this;
-    const { input, users } = this.state;
+    const { data: { input, users } } = this.state;
 
     return (
       <div className="App">

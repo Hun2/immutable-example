@@ -12,7 +12,7 @@ class UserList extends Component {
     return users.map((user) => (
       <User key={user.id} user={user} />
     ))
-  }
+  };
 
   render() {
     console.log('UserList가 렌더링 되고 있습니다.',)
